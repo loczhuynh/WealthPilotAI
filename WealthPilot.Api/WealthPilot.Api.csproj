@@ -25,8 +25,4 @@
     <ProjectReference Include="..\WealthPilot.Infrastructure\WealthPilot.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="WealthPilot.Infrastructure\Data\" />
-  </ItemGroup>
-
 </Project>
