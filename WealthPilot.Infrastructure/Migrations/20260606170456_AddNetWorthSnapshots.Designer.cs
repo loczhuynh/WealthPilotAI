@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WealthPilot.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using WealthPilot.Infrastructure.Data;
 namespace WealthPilot.Infrastructure.Migrations
 {
     [DbContext(typeof(WealthPilotDbContext))]
-    partial class WealthPilotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260606170456_AddNetWorthSnapshots")]
+    partial class AddNetWorthSnapshots
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,7 +105,7 @@ namespace WealthPilot.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NetWorthSnapshots", (string)null);
+                    b.ToTable("NetWorthSnapshots");
                 });
 
             modelBuilder.Entity("WealthPilot.Core.Entities.RentalProperty", b =>
@@ -155,7 +158,7 @@ namespace WealthPilot.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RentalProperties", (string)null);
+                    b.ToTable("NetWorthSnapshot", (string)null);
                 });
 
             modelBuilder.Entity("WealthPilot.Core.Entities.StockHolding", b =>

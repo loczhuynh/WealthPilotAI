@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="WealthPilot.Infrastructure\WealthPilot.Infrastructure.csproj" />
+    <Compile Remove="WealthPilot.Infrastructure\**" />
+    <Content Remove="WealthPilot.Infrastructure\**" />
+    <EmbeddedResource Remove="WealthPilot.Infrastructure\**" />
+    <None Remove="WealthPilot.Infrastructure\**" />
   </ItemGroup>
 
   <ItemGroup>

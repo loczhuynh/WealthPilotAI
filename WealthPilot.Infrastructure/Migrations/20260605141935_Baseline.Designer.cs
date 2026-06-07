@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WealthPilot.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using WealthPilot.Infrastructure.Data;
 namespace WealthPilot.Infrastructure.Migrations
 {
     [DbContext(typeof(WealthPilotDbContext))]
-    partial class WealthPilotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260605141935_Baseline")]
+    partial class Baseline
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,7 +48,7 @@ namespace WealthPilot.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Assets", (string)null);
+                    b.ToTable("Assets");
                 });
 
             modelBuilder.Entity("WealthPilot.Core.Entities.Debt", b =>
@@ -71,38 +74,7 @@ namespace WealthPilot.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Debts", (string)null);
-                });
-
-            modelBuilder.Entity("WealthPilot.Core.Entities.NetWorthSnapshot", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("NetWorth")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("SnapshotDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("StockValue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalAssets")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalDebts")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NetWorthSnapshots", (string)null);
+                    b.ToTable("Debts");
                 });
 
             modelBuilder.Entity("WealthPilot.Core.Entities.RentalProperty", b =>
@@ -155,7 +127,7 @@ namespace WealthPilot.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RentalProperties", (string)null);
+                    b.ToTable("RentalProperties");
                 });
 
             modelBuilder.Entity("WealthPilot.Core.Entities.StockHolding", b =>
@@ -184,7 +156,7 @@ namespace WealthPilot.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StockHoldings", (string)null);
+                    b.ToTable("StockHoldings");
                 });
 #pragma warning restore 612, 618
         }
