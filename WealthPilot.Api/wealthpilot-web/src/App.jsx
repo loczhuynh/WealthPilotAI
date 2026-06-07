@@ -6,6 +6,8 @@ import Debts from "./pages/Debts";
 import Stocks from "./pages/Stocks";
 import FICalculator from "./pages/FICalculator";
 import RentalROI from "./pages/RentalROI";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
     return (
@@ -19,6 +21,8 @@ function App() {
                     <Route path="/stocks" element={<Stocks />} />
                     <Route path="/fi-calculator" element={<FICalculator />} />
                     <Route path="/rental-roi" element={<RentalROI />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                 </Routes>
             </main>
         </BrowserRouter>

@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import apiClient from "../api/apiClient";
-
+import { getUserId } from "../utils/auth";
 
 
 function RentalROI() {
@@ -53,26 +53,46 @@ function RentalROI() {
     const saveDeal = async () => {
         if (!result) return;
 
-        await apiClient.post("/rentalproperties", {
-            userId: 1,
-            propertyName: form.propertyName,
-            purchasePrice: result.purchasePrice,
-            loanAmount: result.loanAmount,
-            monthlyRent: result.monthlyRent,
-            monthlyExpenses: result.monthlyExpenses,
-            monthlyCashFlow: result.monthlyCashFlow,
-            annualCashFlow: result.annualCashFlow,
-            noi: result.noi,
-            capRate: result.capRate,
-            totalCashInvested: result.totalCashInvested,
-            cashOnCashReturn: result.cashOnCashReturn,
-        });
+        const userId = getUserId();
+
+        if (!userId) {
+            alert("Please login first.");
+            return;
+        }
+
+        try {
+            await apiClient.post("/rentalproperties", {
+                userId,
+                propertyName: form.propertyName,
+                purchasePrice: result.purchasePrice,
+                loanAmount: result.loanAmount,
+                monthlyRent: result.monthlyRent,
+                monthlyExpenses: result.monthlyExpenses,
+                monthlyCashFlow: result.monthlyCashFlow,
+                annualCashFlow: result.annualCashFlow,
+                noi: result.noi,
+                capRate: result.capRate,
+                totalCashInvested: result.totalCashInvested,
+                cashOnCashReturn: result.cashOnCashReturn,
+                createdAt: new Date().toISOString()
+            });
+
+            alert("Property saved successfully.");
+            loadSavedDeals();
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data || "Failed to save property.");
+        }
 
         loadSavedDeals();
     };
 
     const loadSavedDeals = async () => {
-        const response = await apiClient.get("/rentalproperties/1");
+        const userId = getUserId();
+
+        if (!userId) return;
+
+        const response = await apiClient.get(`/rentalproperties/${userId}`);
         setSavedDeals(response.data);
     };
 

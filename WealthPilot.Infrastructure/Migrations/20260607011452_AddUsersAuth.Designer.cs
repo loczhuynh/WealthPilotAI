@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WealthPilot.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using WealthPilot.Infrastructure.Data;
 namespace WealthPilot.Infrastructure.Migrations
 {
     [DbContext(typeof(WealthPilotDbContext))]
-    partial class WealthPilotDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260607011452_AddUsersAuth")]
+    partial class AddUsersAuth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

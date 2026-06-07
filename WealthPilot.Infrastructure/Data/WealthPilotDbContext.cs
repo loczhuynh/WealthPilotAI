@@ -23,6 +23,8 @@ namespace WealthPilot.Infrastructure.Data
 
         public DbSet<NetWorthSnapshot> NetWorthSnapshots => Set<NetWorthSnapshot>();
 
+        public DbSet<User> Users => Set<User>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -33,6 +35,7 @@ namespace WealthPilot.Infrastructure.Data
             modelBuilder.Entity<StockHolding>().ToTable("StockHoldings");
             modelBuilder.Entity<RentalProperty>().ToTable("RentalProperties");
             modelBuilder.Entity<NetWorthSnapshot>().ToTable("NetWorthSnapshots");
+            modelBuilder.Entity<User>().ToTable("Users");
         }
     }
 }

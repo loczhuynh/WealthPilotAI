@@ -1,8 +1,9 @@
 ﻿import { useEffect, useState } from "react";
 import apiClient from "../api/apiClient";
+import { getUserId } from "../utils/auth";
 
 function Debts() {
-    const userId = 1;
+    const userId = getUserId();
 
     const [debts, setDebts] = useState([]);
     const [name, setName] = useState("");

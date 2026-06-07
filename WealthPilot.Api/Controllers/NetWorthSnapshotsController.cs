@@ -39,15 +39,15 @@ public class NetWorthSnapshotsController : ControllerBase
         var startOfDay = DateTime.UtcNow.Date;
         var endOfDay = startOfDay.AddDays(1);
 
-        var snapshotExistsToday = await _context.NetWorthSnapshots
-            .AnyAsync(x =>
-                x.UserId == userId &&
-                x.SnapshotDate >= startOfDay &&
-                x.SnapshotDate < endOfDay);
+        var existingSnapshot = await _context.NetWorthSnapshots
+            .FirstOrDefaultAsync(x =>
+            x.UserId == userId &&
+            x.SnapshotDate >= startOfDay &&
+            x.SnapshotDate < endOfDay);
 
-        if (snapshotExistsToday)
+        if (existingSnapshot != null)
         {
-            return Ok("Snapshot already exists today.");
+            return Ok(existingSnapshot);
         }
 
         var snapshot = new NetWorthSnapshot

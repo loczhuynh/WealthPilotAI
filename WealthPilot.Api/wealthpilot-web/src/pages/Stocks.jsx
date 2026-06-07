@@ -1,8 +1,8 @@
 ﻿import { useEffect, useState } from "react";
 import apiClient from "../api/apiClient";
-
+import { getUserId } from "../utils/auth";
 function Stocks() {
-    const userId = 1;
+    const userId = getUserId();
 
     const [stocks, setStocks] = useState([]);
     const [ticker, setTicker] = useState("");
