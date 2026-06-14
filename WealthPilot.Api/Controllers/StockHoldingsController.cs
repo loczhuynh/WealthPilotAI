@@ -47,13 +47,9 @@ public class StockHoldingsController : ControllerBase
     [HttpGet("{userId:int}")]
     public async Task<IActionResult> GetStockHoldings(int userId)
     {
-        // Materialize entities first to avoid server-side casting issues when DB column types differ
-        var stockEntities = await _context.StockHoldings
+        var stocks = await _context.StockHoldings
             .Where(x => x.UserId == userId)
             .OrderBy(x => x.Ticker)
-            .ToListAsync();
-
-        var stocks = stockEntities
             .Select(x => new
             {
                 x.Id,
@@ -64,9 +60,12 @@ public class StockHoldingsController : ControllerBase
                 x.CurrentPrice,
                 TotalCost = x.Shares * x.AvgCost,
                 CurrentValue = x.Shares * x.CurrentPrice,
-                GainLoss = (x.Shares * x.CurrentPrice) - (x.Shares * x.AvgCost)
+                GainLoss = (x.Shares * x.CurrentPrice) - (x.Shares * x.AvgCost),
+                GainLossPercent = x.AvgCost > 0
+                    ? ((x.CurrentPrice - x.AvgCost) / x.AvgCost) * 100
+                    : 0
             })
-            .ToList();
+            .ToListAsync();
 
         return Ok(stocks);
     }

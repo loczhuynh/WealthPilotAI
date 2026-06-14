@@ -25,6 +25,8 @@ namespace WealthPilot.Infrastructure.Data
 
         public DbSet<User> Users => Set<User>();
 
+        public DbSet<FinancialGoal> FinancialGoals => Set<FinancialGoal>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -36,6 +38,7 @@ namespace WealthPilot.Infrastructure.Data
             modelBuilder.Entity<RentalProperty>().ToTable("RentalProperties");
             modelBuilder.Entity<NetWorthSnapshot>().ToTable("NetWorthSnapshots");
             modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<FinancialGoal>().ToTable("FinancialGoals");
         }
     }
 }

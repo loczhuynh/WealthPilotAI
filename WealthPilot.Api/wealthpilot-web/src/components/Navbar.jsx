@@ -9,6 +9,7 @@ function Navbar() {
             <Link to="/stocks" style={linkStyle}>Stocks</Link>
             <Link to="/fi-calculator" style={linkStyle}>FI Calculator</Link>
             <Link to="/rental-roi" style={linkStyle}>Rental ROI</Link>
+            <Link to="/fi-settings" style={linkStyle}>FI Settings</Link>
             <Link to="/login" style={linkStyle}>Login</Link>
             <Link to="/register" style={linkStyle}>Register</Link>
         </nav>

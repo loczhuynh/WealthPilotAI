@@ -2,6 +2,14 @@
 import apiClient from "../api/apiClient";
 import StatCard from "../components/StatCard";
 import { getUserId } from "../utils/auth";
+import FIProgressCard from "../components/FIProgressCard";
+import PortfolioPerformance from "../components/PortfolioPerformance";
+import NetWorthForecastChart from "../components/NetWorthForecastChart";
+import AIInsightsCard from "../components/AIInsightsCard";
+import FIScenarioSimulator from "../components/FIScenarioSimulator";
+import FIStrategyComparison from "../components/FIStrategyComparison";
+import PortfolioCoachCard from "../components/PortfolioCoachCard";
+import WealthPilotAssistant from "../components/ai/WealthPilotAssistant";
 
 import {
     LineChart,
@@ -53,10 +61,16 @@ function Dashboard() {
     const [data, setData] = useState(null);
     const [snapshots, setSnapshots] = useState([]);
     const [allocation, setAllocation] = useState([]);
+    const [financialGoal, setFinancialGoal] = useState(null);
 
     const loadDashboard = async () => {
         const response = await apiClient.get(`/dashboard/${userId}`);
         setData(response.data);
+    };
+
+    const loadFinancialGoal = async () => {
+        const response = await apiClient.get(`/financialgoals/${userId}`);
+        setFinancialGoal(response.data);
     };
 
     const loadSnapshots = async () => {
@@ -100,6 +114,7 @@ function Dashboard() {
             await saveSnapshot();
             await loadSnapshots();
             await loadAllocation();
+            await loadFinancialGoal();
         };
 
         initializeDashboard();
@@ -132,6 +147,30 @@ function Dashboard() {
         0
     );
 
+    const fiProgress = financialGoal
+        ? (Number(data.netWorth) / Number(financialGoal.fiTarget)) * 100
+        : 0;
+
+    const nextMilestone = getNextMilestone(fiProgress);
+
+    const nextMilestoneAmount = financialGoal
+        ? Number(financialGoal.fiTarget) * (nextMilestone / 100)
+        : 0;
+
+    const nextMilestoneGap = Math.max(
+        nextMilestoneAmount - Number(data.netWorth),
+        0
+    );
+
+    const yearsToFI = financialGoal
+        ? calculateYearsToFI(
+            Number(data.netWorth),
+            Number(financialGoal.monthlyInvestment),
+            Number(financialGoal.expectedAnnualReturn),
+            Number(financialGoal.fiTarget)
+        )
+        : 0;
+
     return (
         <div>
             <h1>WealthPilot AI Dashboard</h1>
@@ -142,6 +181,72 @@ function Dashboard() {
                 <StatCard title="Stock Value" value={data.stockValue} />
                 <StatCard title="Net Worth" value={data.netWorth} />
             </div>
+
+            {
+                financialGoal && (
+                    <FIProgressCard
+                        currentNetWorth={Number(data.netWorth)}
+                        targetAmount={financialGoal.fiTarget}
+                        monthlyInvestment={financialGoal.monthlyInvestment}
+                        expectedAnnualReturn={financialGoal.expectedAnnualReturn}
+                    />
+                )
+            }
+
+            {financialGoal && (
+                <NetWorthForecastChart
+                    currentNetWorth={Number(data.netWorth)}
+                    monthlyInvestment={Number(financialGoal.monthlyInvestment)}
+                    expectedAnnualReturn={Number(financialGoal.expectedAnnualReturn)}
+                    targetAmount={Number(financialGoal.fiTarget)}
+                />
+            )}
+
+            {financialGoal && (
+                <AIInsightsCard
+                    netWorth={Number(data.netWorth)}
+                    stockValue={Number(data.stockValue)}
+                    fiProgress={fiProgress}
+                    nextMilestoneAmount={nextMilestoneGap}
+                    monthlyInvestment={Number(financialGoal.monthlyInvestment)}
+                    yearsToFI={yearsToFI}
+                />
+            )}
+
+            {financialGoal && (
+                <FIScenarioSimulator
+                    currentNetWorth={Number(data.netWorth)}
+                    currentMonthlyInvestment={Number(financialGoal.monthlyInvestment)}
+                    currentExpectedReturn={Number(financialGoal.expectedAnnualReturn)}
+                    currentTargetAmount={Number(financialGoal.fiTarget)}
+                    currentYearsToFI={yearsToFI}
+                />
+            )}
+
+            {financialGoal && (
+                <FIStrategyComparison
+                    currentNetWorth={Number(data.netWorth)}
+                    monthlyInvestment={Number(financialGoal.monthlyInvestment)}
+                    expectedAnnualReturn={Number(financialGoal.expectedAnnualReturn)}
+                    targetAmount={Number(financialGoal.fiTarget)}
+                />
+            )}
+
+            <PortfolioPerformance />
+
+            <PortfolioCoachCard />
+
+            <WealthPilotAssistant
+                dashboardData={{
+                    fiDate: "Jan 2047",
+                    yearsToFI: yearsToFI,
+                    portfolioScore: 90,
+                    wealthScore: 82,
+                    bestPerformer: "QQQ is your strongest performer at +16.73%.",
+                    worstPerformer: "KYMR is your weakest holding at -12.11%.",
+                    biggestRisk: "KYMR is currently down 12.11%. Review whether the thesis still holds.",
+                }}
+            />
 
             <div style={chartCardStyle}>
                 <h2>Net Worth Trend</h2>
@@ -261,5 +366,29 @@ const chartCardStyle = {
     background: "#f3f4f6",
     boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
 };
+
+function getNextMilestone(progress) {
+    if (progress < 1) return 1;
+    if (progress < 5) return 5;
+    if (progress < 10) return 10;
+    if (progress < 25) return 25;
+    if (progress < 50) return 50;
+    if (progress < 75) return 75;
+    if (progress < 100) return 100;
+    return 100;
+}
+
+function calculateYearsToFI(currentNetWorth, monthlyInvestment, annualReturn, targetAmount) {
+    const monthlyReturn = annualReturn / 100 / 12;
+    let balance = Number(currentNetWorth);
+    let months = 0;
+
+    while (balance < targetAmount && months < 1200) {
+        balance = balance * (1 + monthlyReturn) + Number(monthlyInvestment);
+        months++;
+    }
+
+    return Number((months / 12).toFixed(1));
+}
 
 export default Dashboard;

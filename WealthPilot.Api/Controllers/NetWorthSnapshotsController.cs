@@ -47,6 +47,14 @@ public class NetWorthSnapshotsController : ControllerBase
 
         if (existingSnapshot != null)
         {
+            existingSnapshot.TotalAssets = totalAssets;
+            existingSnapshot.TotalDebts = totalDebts;
+            existingSnapshot.StockValue = stockValue;
+            existingSnapshot.NetWorth = netWorth;
+            existingSnapshot.SnapshotDate = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
             return Ok(existingSnapshot);
         }
 
