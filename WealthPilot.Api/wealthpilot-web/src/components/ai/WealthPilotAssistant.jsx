@@ -89,7 +89,9 @@ function WealthPilotAssistant({ dashboardData }) {
                             {msg.sender === "user" ? "You" : "AI"}
                         </strong>
 
-                        <div>{msg.text}</div>
+                        <div style={{ whiteSpace: "pre-line" }}>
+                            {msg.text}
+                        </div>
                     </div>
                 ))}
             </div>

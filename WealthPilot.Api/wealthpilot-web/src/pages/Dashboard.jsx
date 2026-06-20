@@ -171,6 +171,19 @@ function Dashboard() {
         )
         : 0;
 
+    const assistantData = {
+        fiDate: getEstimatedFiDate(yearsToFI),
+        yearsToFI,
+        portfolioScore: 90,
+        wealthScore: 82,
+        bestPerformer: "QQQ is your strongest performer at +16.73%.",
+        worstPerformer: "KYMR is your weakest holding at -12.11%.",
+        biggestRisk: "KYMR is currently down 12.11%. Review whether the thesis still holds.",
+        netWorth: Number(data.netWorth),
+        monthlyInvestment: Number(financialGoal?.monthlyInvestment || 0),
+        targetAmount: Number(financialGoal?.fiTarget || 0),
+    };
+
     return (
         <div>
             <h1>WealthPilot AI Dashboard</h1>
@@ -236,17 +249,7 @@ function Dashboard() {
 
             <PortfolioCoachCard />
 
-            <WealthPilotAssistant
-                dashboardData={{
-                    fiDate: "Jan 2047",
-                    yearsToFI: yearsToFI,
-                    portfolioScore: 90,
-                    wealthScore: 82,
-                    bestPerformer: "QQQ is your strongest performer at +16.73%.",
-                    worstPerformer: "KYMR is your weakest holding at -12.11%.",
-                    biggestRisk: "KYMR is currently down 12.11%. Review whether the thesis still holds.",
-                }}
-            />
+            <WealthPilotAssistant dashboardData={assistantData} />
 
             <div style={chartCardStyle}>
                 <h2>Net Worth Trend</h2>
@@ -389,6 +392,16 @@ function calculateYearsToFI(currentNetWorth, monthlyInvestment, annualReturn, ta
     }
 
     return Number((months / 12).toFixed(1));
+}
+
+function getEstimatedFiDate(yearsRemaining) {
+    const date = new Date();
+    date.setMonth(date.getMonth() + Math.round(Number(yearsRemaining) * 12));
+
+    return date.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+    });
 }
 
 export default Dashboard;
